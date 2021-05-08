@@ -1,0 +1,143 @@
+#server:
+#  port: 8080
+#spring:
+#  application:
+#    name: spring-cloud-gateway-demo
+#  cloud:
+#    gateway:
+#      discovery:
+#        locator:
+#          enabled: true #启用路由访问
+#      routes:
+#        - id: path_route
+#          # 指定域名
+#          uri: http://localhost:8081
+#          predicates:
+#            - Path=/jar/**
+#          filters:
+#            # 熔断配置
+#            - name: Hystrix
+#              args:
+#                name: default
+#                fallbackUri: forward:/fallback
+#        - id: path_route2
+#          # 指定域名
+#          uri: http://localhost:8082
+#          predicates:
+#            - Path=/war/**
+#          filters:
+#            # 熔断配置
+#            - name: Hystrix
+#              args:
+#                name: hystrix1
+#                fallbackUri: forward:/fallback
+server:
+  port: 9527
+nacos:
+  gateway:
+    route:
+      config:
+        data-id: gateway-9527-public.yaml
+        group: DEFAULT_GROUP
+        namespace: 95c0ce18-50e0-4e1b-917e-6429d0c54c5e
+spring:
+  application:
+    name: gateway-9527
+  profiles:
+    active: public
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.1.135:8848
+        namespace: 95c0ce18-50e0-4e1b-917e-6429d0c54c5e
+        locator:
+          lowerCaseServiceId: true
+          enabled: true
+      config:
+        ext-config:
+          dataId: gateway-9527
+        group: DEFAULT_GROUP
+        data-id: gateway-9527
+        server-addr: 192.168.1.135:8848
+        file-extension: yaml
+        namespace: 95c0ce18-50e0-4e1b-917e-6429d0c54c5e
+
+    sentinel:
+      transport:
+        # 本地服务要和给sentinel控制面板展示信息，那么需要在本地起一个端口服务来进行数据的发送，这个就是干这个用的
+        port: 8085
+        # 配置将sentinel的流控规则在哪个sentinel的控制面板显示
+        dashboard: 192.168.1.133:8080
+      # 这个是sentinel在nacos中进行持久化的配置，也就是说会从下面nacos的配置中获取到实际的流控规则
+      datasource:
+        ds1:
+          nacos:
+            server-addr: 192.168.1.135:8848
+            dataId: gateway-sentinel-service
+            namespace: 95c0ce18-50e0-4e1b-917e-6429d0c54c5e
+            groupId: DEFAULT_GROUP
+            data-type: json
+            rule-type: flow
+
+
+    gateway:
+      discovery:
+        locator:
+          lowerCaseServiceId: true
+          enabled: true
+
+        filter:
+          remove-hop-by-hop:
+            headers:
+              - connection
+              - keep-alive
+              - te
+              - trailer
+              - proxy-authorization
+              - proxy-authenticate
+              - x-application-context
+              - upgrade
+  redis:
+    database: 0
+    host: 192.168.1.133
+    port: 6579
+    password: wisecloud2018
+    lettuce:
+      pool:
+        max-active: 300
+        max-idle: 8
+        max-wait: -1ms
+        min-idle: 0
+  session:
+    store-type: redis
+  mvc:
+    throw-exception-if-no-handler-found: true
+
+# 默认熔断超时时间30s
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000
+    hystrix1:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 1000
+# 报文转换配置
+trans:
+  url-list:
+    - paths: /jar/api/cockpit
+      content-type: application/json
+      fields:
+        # 新字段:老字段，若新老字段一致，可以只配置新字段
+        - code:rs
+        - msg:rsdesp
+        - data:resultMessage
+    - paths: /war/api/delivertool
+      fields:
+        - code:rs
+        - msg:rsdesp
+        - data:resultMessage

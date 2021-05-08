@@ -1,0 +1,61 @@
+#端口设置
+server:
+  port: 8089
+
+spring:
+  application:
+    name: paycore
+  profiles:
+    # 环境配置dev
+    active: public
+  cloud:
+    nacos:
+      discovery:
+        username: nacos
+        password: nacos
+        service: paycore
+        server-addr: 192.168.1.135:8848
+        metadata:
+          company: 小溪流
+          version: 0.0.1-SNAPSHOT
+          date: 2020-9-24 14:12:47
+      config:
+        namespace: public
+        enabled: true
+        server-addr: 192.168.1.135:8848
+        group: DEFAULT_GROUP
+        file-extension: yaml
+        prefix: paycore
+
+
+feign.client:
+  default-to-properties: false
+  config:
+    paycore-manage:
+      loggerLevel: HEADERS
+      connectTimeout: 300
+      readTimeout: 500
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+    jmx:
+      exposure:
+        include: "*"
+    health:
+      show-details: always
+
+#MP配置文件详解:https://baomidou.com/config/
+#mybatis-plus:
+#  mapper-locations: classpath:mapper/*.xml
+#  type-aliases-package: com.xxl.model
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    map-underscore-to-camel-case: true #实体接收自动转驼峰映射
+#    call-setters-on-nulls: true
+#  global-config:
+#    banner: false
+#    db-config:
+#      id-type: input

@@ -1,0 +1,88 @@
+#端口设置
+server:
+  port: 8081
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
+
+#变量
+group: DEFAULT_GROUP
+server-addr: 192.168.1.135:8847
+namespace: 95c0ce18-50e0-4e1b-917e-6429d0c54c5e
+
+spring:
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+  application:
+    name: magia-core
+  profiles:
+    # 环境配置dev
+    active: public
+  cloud:
+    nacos:
+      discovery:
+        username: nacos
+        password: nacos
+        service: ${spring.application.name}
+        server-addr: ${server-addr}
+        namespace: ${namespace}
+        metadata:
+          company: 小溪流
+          version: 0.0.1-SNAPSHOT
+          date: 2020-9-24 14:12:47
+        weight: 2.1
+      config:
+        namespace: ${namespace}
+        enabled: true
+        server-addr: ${server-addr}
+        group: ${group}
+        file-extension: yaml
+        prefix: ${spring.application.name}
+        extension-configs[0]:
+          data-id: magia-share-public.yml
+          group: DEFAULT_GROUP
+          refresh: true
+
+
+feign.client:
+  default-to-properties: false
+  config:
+    paycore-manage:
+      loggerLevel: HEADERS
+      connectTimeout: 300
+      readTimeout: 500
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+    jmx:
+      exposure:
+        include: "*"
+    health:
+      show-details: always
+
+dubbo:
+  scan:
+    base-packages: com.xxl
+  protocols:
+    dubbo:
+      name: dubbo
+      port: -1
+  registry:
+    address: spring-cloud://${server-addr}
+    namespace: ${namespace}
+  cloud:
+    subscribed-services: ${spring.application.name}
+
+logging:
+  config: classpath:log4j2.yml
+
+
+
+

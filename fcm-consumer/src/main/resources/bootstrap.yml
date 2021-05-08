@@ -1,0 +1,74 @@
+# springBoot配置文件启动顺序
+# bootstrap.properties > bootstrap.yaml > application.properties > application.yaml
+
+#端口设置
+server:
+  port: 8090
+
+#变量。主要是下面的nacos的配置信息来引用的
+group: DEFAULT_GROUP
+server-addr: 192.168.1.135:8848
+namespace: de5a140e-1f73-468c-a319-9ec789c1793b
+
+
+# 这里的配置 是结合pom.xml文件中的spring-cloud-starter-alibaba-nacos-config组件来使用的。
+#  spring.profiles.active=dev
+#  spring.application.name=service-provider-config
+#  spring.cloud.nacos.config.server-addr=192.168.127.132:8848
+#  spring.cloud.nacos.config.file-extension=yaml
+spring:
+  application:
+    name: fcm-consumer
+  profiles:
+    # 环境配置dev
+    active: public
+  cloud:
+    nacos:
+      discovery:
+        username: nacos
+        password: nacos
+        service: ${spring.application.name}
+        server-addr: ${server-addr}
+        namespace: ${namespace}
+        metadata:
+          company: 小溪流
+          version: 0.0.1-SNAPSHOT
+          date: 2020-9-24 14:12:47
+        weight: 2.1
+      config:
+        namespace: ${namespace}
+        enabled: true
+        server-addr: ${server-addr}
+        group: ${group}
+        file-extension: yaml
+        prefix: ${spring.application.name}
+
+
+# 监控的，感觉这里应该么有使用到
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+    jmx:
+      exposure:
+        include: "*"
+    health:
+      show-details: always
+
+dubbo:
+  scan:
+    base-packages: com.xxl.service
+  protocols:
+    dubbo:
+      name: dubbo
+      port: -1
+  registry:
+    address: spring-cloud://${server-addr}
+    namespace: ${namespace}
+  cloud:
+    subscribed-services: device-provider
+logging:
+  config: classpath:log4j2.yml
+
+

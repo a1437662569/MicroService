@@ -1,0 +1,5 @@
+实现JWT的思路：
+1、使用JwtUtils.java中可以生成JWT和验证JWT的准确性
+2、自定义的拦截器AuthenticationInterceptor中会对所有请求进行拦截，这其中只会对请求头里面的token进行获取，所以和加密是没有影响的
+3、PassToken和UserLoginToken这两个注解的作用是关键，使用@PassToken修饰的接口，表示该接口不需要做JWT校验，而使用了@UserLoginToken
+的表示需要，业务逻辑中，只要需要做token校验的接口才需要添加@UserLoginToken注解。当然，不添加注解的话默认是直接放行的

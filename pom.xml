@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--GAV：即groupId、artifactId、Version，这三个是最基本的配置 -->
+    <groupId>com.xxl</groupId>
+    <artifactId>wisecloud</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>wisecloud</name>
+
+    <!--
+    packing默认是jar类型，
+    pom  父类型都为pom类型
+    jar 内部调用或者是作服务使用
+    war  需要部署的项目
+    -->
+    <packaging>pom</packaging>
+
+    <description>小溪流云启：启元</description>
+
+    <!--
+    properties标签用来定义变量，以便通过${}的方式来引用
+    -->
+    <properties>
+        <wisecloud.version>0.0.1-SNAPSHOT</wisecloud.version>
+
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <aliyun-spring-boot.version>2.1.0</aliyun-spring-boot.version>
+        <spring-boot.version>2.3.4.RELEASE</spring-boot.version>
+        <spring-cloud-alibaba.version>2.2.3.RELEASE</spring-cloud-alibaba.version>
+        <spring-cloud.version>Hoxton.SR8</spring-cloud.version>
+
+        <com.baomidou.ds.version>3.2.0</com.baomidou.ds.version>
+        <com.baomidou.plus.version>3.4.0</com.baomidou.plus.version>
+        <mybatis-plus-extension.version>3.4.0</mybatis-plus-extension.version>
+        <commons-lang.version>2.6</commons-lang.version>
+        <commons-collections.version>3.2.2</commons-collections.version>
+
+        <servlet-api>3.1.0</servlet-api>
+        <validation-api>2.0.1.Final</validation-api>
+        <hibernate-validator>6.0.13.Final</hibernate-validator>
+        <lombok.version>1.18.16</lombok.version>
+        <commons-pool2.version>2.8.1</commons-pool2.version>
+        <fastjson.version>1.2.28</fastjson.version>
+        <jackso.databind.version>2.10.1</jackso.databind.version>
+        <jackson-dataformat-yaml>2.10.5</jackson-dataformat-yaml>
+        <commons-lang3.version>3.9</commons-lang3.version>
+        <druid.version>1.1.9</druid.version>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+
+        <joda-time.version>2.10.6</joda-time.version>
+        <ftp-version>3.6</ftp-version>
+        <spring-web-version>5.2.9.RELEASE</spring-web-version>
+        <maxmind-db-version>1.2.1</maxmind-db-version>
+        <hutool-version>4.6.3</hutool-version>
+        <google-guava-version>30.1-jre</google-guava-version>
+        <redisson-version>3.15.1</redisson-version>
+        <java-jwt-version>3.10.3</java-jwt-version>
+        <com.google.code.gson-version>2.8.6</com.google.code.gson-version>
+    </properties>
+
+    <!-- 父类项目通过modules标签将子项目引入进来-->
+    <modules>
+        <module>template-provider</module>
+        <module>template-consumer</module>
+        <module>device-provider</module>
+        <module>box-provider</module>
+        <module>fcm-consumer</module>
+        <!--<module>gateway-9527</module>-->
+        <module>gateway</module>
+        <!--<module>wisecloud-common</module>-->
+        <module>wisecloud-common/common-module</module>
+        <module>wisecloud-common/common-api</module>
+
+
+        <module>magia/magia-core</module>
+        <module>magia/magia-common</module>
+
+    </modules>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <!--  添加子模块common中的两个依赖-->
+            <dependency>
+                <groupId>com.xxl</groupId>
+                <artifactId>common-module</artifactId>
+                <version>${wisecloud.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.xxl</groupId>
+                <artifactId>common-api</artifactId>
+                <version>${wisecloud.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.xxl</groupId>
+                <artifactId>appstore-common</artifactId>
+                <version>${wisecloud.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.xxl</groupId>
+                <artifactId>magia-common</artifactId>
+                <version>${wisecloud.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackso.databind.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${servlet-api}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.maxmind.db</groupId>
+                <artifactId>maxmind-db</artifactId>
+                <version>${maxmind-db-version}</version>
+            </dependency>
+
+            <!-- 这是ftp的jar包 -->
+            <dependency>
+                <groupId>commons-net</groupId>
+                <artifactId>commons-net</artifactId>
+                <version>${ftp-version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/joda-time/joda-time -->
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>${joda-time.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+                <optional>true</optional>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-pool2</artifactId>
+                <version>${commons-pool2.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson-spring-boot-starter</artifactId>
+                <version>${redisson-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-web</artifactId>
+                <version>${spring-web-version}</version>
+            </dependency>
+           <!-- <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-web</artifactId>
+                <version>${spring-web-version}</version>
+            </dependency>-->
+            <!--
+             多数据源:
+             1、通过yml配置好数据源
+             2、我们这里应该是集成了nacos，所以只需要在nacos上配置文件即可。
+             -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+                <version>${com.baomidou.ds.version}</version>
+            </dependency>
+
+            <!-- mybatis的依赖-->
+            <!--<dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${com.baomidou.plus.version}</version>
+            </dependency>-->
+            <!-- https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-boot-starter -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${com.baomidou.plus.version}</version>
+            </dependency>
+
+
+            <!-- https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-extension -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-extension</artifactId>
+                <version>${mybatis-plus-extension.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>${commons-lang.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>${commons-collections.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>${validation-api}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate.validator</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${hibernate-validator}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-solr</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-webflux</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-aop</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <exclusions><!-- 去掉springboot默认配置 -->
+                    <exclusion>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency> <!-- 引入log4j2依赖 -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-log4j2</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-yaml</artifactId>
+                <version>${jackson-dataformat-yaml}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.xxl</groupId>
+                <artifactId>appstore-ams</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool-version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${google-guava-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.auth0</groupId>
+                <artifactId>java-jwt</artifactId>
+                <version>${java-jwt-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${com.google.code.gson-version}</version>
+            </dependency>
+
+
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <!-- 这个插件的作用是编译用的，没有就启动不了-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+
+
+            <!-- spring-boot-maven-plugin插件在打Jar包时会引入依赖包-->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot.version}</version>
+                <configuration>
+                    <mainClass>com.example.demo.WisecloudApplication</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>repackage</id>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.12.4</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

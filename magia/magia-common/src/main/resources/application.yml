@@ -1,0 +1,5 @@
+updateTimesTimer:
+  onOff: open
+  fixedDelay: 60000
+  zone: Asia/Shanghai
+  initialDelay: 10000
